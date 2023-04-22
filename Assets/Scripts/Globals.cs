@@ -21,4 +21,6 @@ public class Globals {
       { "wood", new GameResource("Wood", 750) },
       { "stone", new GameResource("Stone", 750) }
     };
+
+  public static List<UnitManager> SELECTED_UNITS = new List<UnitManager>();
 }
