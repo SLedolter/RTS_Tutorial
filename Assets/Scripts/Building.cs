@@ -21,7 +21,7 @@ public class Building {
     _currentHealth = data.HP;
 
     GameObject g = GameObject.Instantiate(
-      Resources.Load($"Prefabs/Buildings/{_data.Code}")
+      Resources.Load($"Prefabs/Units/Buildings/{_data.Code}")
       ) as GameObject;
     _transform = g.transform;
     _placement = BuildingPlacement.VALID;
