@@ -973,6 +973,7 @@ GameObject:
   - component: {fileID: 1843285752}
   - component: {fileID: 1843285753}
   - component: {fileID: 1843285754}
+  - component: {fileID: 1843285755}
   m_Layer: 0
   m_Name: GAME
   m_TagString: Untagged
@@ -1023,6 +1024,18 @@ MonoBehaviour:
   buildingButtonPrefab: {fileID: 61385944846455299, guid: a94f022742ca72744a19ea083940899f, type: 3}
   resourcesUIParent: {fileID: 795274578}
   gameResourceDisplayPrefab: {fileID: 433968308272594533, guid: 6d6211ebc8f652447a7e3804a03af0f8, type: 3}
+--- !u!114 &1843285755
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1843285751}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7cb9b0a28c309a459102cbea7343247, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1938739394
 GameObject:
   m_ObjectHideFlags: 0

@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour {
-  private UIManager _uiManager;
-
   private Building _placedBuilding = null;
   private Ray _ray;
   private RaycastHit _raycastHit;
@@ -15,9 +13,7 @@ public class BuildingPlacer : MonoBehaviour {
     _PreparePlacedBuilding(buildingDataIndex);
   }
 
-  private void Awake() {
-    _uiManager = GetComponent<UIManager>();
-  }
+  private void Awake() { }
 
   void Update() {
     if (_placedBuilding != null) {
@@ -75,7 +71,7 @@ public class BuildingPlacer : MonoBehaviour {
     } else {
       _placedBuilding = null;
     }
-    _uiManager.UpdateResourceTexts();
-    _uiManager.CheckBuildingButtons();
+    EventManager.TriggerEvent("UpdateResourceTexts");
+    EventManager.TriggerEvent("CheckBuildingButtons");
   }
 }

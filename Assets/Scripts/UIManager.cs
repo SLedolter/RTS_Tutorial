@@ -17,6 +17,16 @@ public class UIManager : MonoBehaviour
   private Dictionary<string, TMP_Text> _resourceTexts;
   private Dictionary<string, Button> _buildingButtons;
 
+  private void OnEnable() {
+    EventManager.AddListener("UpdateResourceTexts", _OnUpdateResourceTexts);
+    EventManager.AddListener("CheckBuildingButtons", _OnCheckBuildingButtons);
+  }
+
+  private void OnDisable() {
+    EventManager.RemoveListener("UpdateResourceTexts", _OnUpdateResourceTexts);
+    EventManager.RemoveListener("CheckBuildingButtons", _OnCheckBuildingButtons);
+  }
+
   private void Awake() {
     // create texts for each in-game resource (gold, wood, stone, ...)
     _resourceTexts = new Dictionary<string, TMP_Text>();
@@ -24,7 +34,7 @@ public class UIManager : MonoBehaviour
       GameObject display = Instantiate(gameResourceDisplayPrefab, resourcesUIParent);
       display.name = pair.Key;
       _resourceTexts[pair.Key] = display.transform.Find("Text").GetComponent<TMP_Text>();
-      _SetResourceText(pair.Key, pair.Value.Amount);
+      SetResourceText(pair.Key, pair.Value.Amount);
       Debug.Log(pair.Key);
     }
     _buildingPlacer = GetComponent<BuildingPlacer>();
@@ -48,13 +58,13 @@ public class UIManager : MonoBehaviour
     }
   }
 
-  private void _SetResourceText(string resource, int value) {
+  private void SetResourceText(string resource, int value) {
     _resourceTexts[resource].text = value.ToString();
   }
 
-  public void UpdateResourceTexts() {
+  private void _OnUpdateResourceTexts() {
     foreach(KeyValuePair<string, GameResource> pair in Globals.GAME_RESOURCES) {
-      _SetResourceText(pair.Key, pair.Value.Amount);
+      SetResourceText(pair.Key, pair.Value.Amount);
     }
   }
 
@@ -62,7 +72,7 @@ public class UIManager : MonoBehaviour
     b.onClick.AddListener(() => _buildingPlacer.SelectPlacedBuilding(i));
   }
 
-  public void CheckBuildingButtons() {
+  private void _OnCheckBuildingButtons() {
     foreach(BuildingData data in Globals.BUILDING_DATA) {
       _buildingButtons[data.Code].interactable = data.CanBuy();
     }
