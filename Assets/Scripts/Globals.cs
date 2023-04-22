@@ -1,17 +1,7 @@
 using System.Collections.Generic;
 
 public class Globals {
-  public static BuildingData[] BUILDING_DATA = new BuildingData[] {
-    new BuildingData("House", 100, new Dictionary<string, int>() {
-      { "gold", 100 },
-      { "wood", 120 }
-    }),
-    new BuildingData("Tower", 50, new Dictionary < string, int >() { 
-      { "gold", 80 }, 
-      { "wood", 80 },
-      { "stone", 100 }
-    })
-  };
+  public static BuildingData[] BUILDING_DATA;
 
   public static int TERRAIN_LAYER_MASK = 1 << 8; // Layer-Index bitwise
 
