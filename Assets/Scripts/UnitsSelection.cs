@@ -5,6 +5,8 @@ using UnityEngine;
 public class UnitsSelection : MonoBehaviour {
   private bool _isDragginMouseBox = false;
   private Vector3 _dragStartPosition;
+  private Ray _ray;
+  private RaycastHit _raycastHit;
 
   void Update() {
     if (Input.GetMouseButtonDown(0)) {
@@ -18,6 +20,20 @@ public class UnitsSelection : MonoBehaviour {
 
     if (_isDragginMouseBox && _dragStartPosition != Input.mousePosition) {
       _SelectUnitsInDraggingBox();
+    }
+
+    if(Globals.SELECTED_UNITS.Count > 0) {
+      if(Input.GetKeyDown(KeyCode.Escape)) {
+        _DeselectAllUnits();
+      }
+      if (Input.GetMouseButtonDown(0)) {
+        _ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if(Physics.Raycast(_ray, out _raycastHit, 1000f)) {
+          if(_raycastHit.transform.tag == "Terrain") {
+            _DeselectAllUnits();
+          }
+        }
+      }
     }
   }
 
@@ -47,6 +63,13 @@ public class UnitsSelection : MonoBehaviour {
       var rect = Utils.GetScreenRect(_dragStartPosition, Input.mousePosition);
       Utils.DrawScreenRect(rect, new Color(0.5f, 1f, 0.4f, 0.2f));
       Utils.DrawScreenRectBorder(rect, 1, new Color(0.5f, 1f, 0.4f));
+    }
+  }
+
+  private void _DeselectAllUnits() {
+    List<UnitManager> selectedUnits = new List<UnitManager>(Globals.SELECTED_UNITS);
+    foreach(UnitManager um in selectedUnits) {
+      um.Deselect();
     }
   }
 }

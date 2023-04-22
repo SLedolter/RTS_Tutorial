@@ -37,7 +37,7 @@ public class BuildingPlacer : MonoBehaviour {
       }
 
       if (_placedBuilding.HasValidPlacement 
-        && Input.GetMouseButtonDown(0)
+        && Input.GetMouseButtonUp(0)
         && !EventSystem.current.IsPointerOverGameObject()) {
         _PlaceBuilding();
       }
