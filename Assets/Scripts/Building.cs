@@ -14,7 +14,8 @@ public class Building : Unit {
   private List<Material> _materials;
   private BuildingManager _buildingManager;
 
-  public Building(BuildingData data) : base(data) {
+  public Building(BuildingData data) : this(data, new List<ResourceValue>() { }) { }
+  public Building(BuildingData data, List<ResourceValue> production) : base(data, production) {
     _buildingManager = _transform.GetComponent<BuildingManager>();
     _materials = new List<Material>();
     foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials) {
