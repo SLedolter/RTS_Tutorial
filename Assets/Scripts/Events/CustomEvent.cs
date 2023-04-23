@@ -4,6 +4,4 @@ using UnityEngine;
 using UnityEngine.Events;
 
 [System.Serializable]
-public class CustomEvent : UnityEvent<CustomEvent> {
-  
-}
+public class CustomEvent : UnityEvent<CustomEventData> { }

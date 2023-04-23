@@ -57,7 +57,7 @@ public class EventManager : MonoBehaviour {
     }
   }
 
-  public static void AddTypedListener(string eventName, UnityAction<CustomEvent> listener) {
+  public static void AddTypedListener(string eventName, UnityAction<CustomEventData> listener) {
     CustomEvent evt = null;
     if(instance._typedEvents.TryGetValue(eventName, out evt)) {
       evt.AddListener(listener);
@@ -68,7 +68,7 @@ public class EventManager : MonoBehaviour {
     }
   }
 
-  public static void RemoveTypeListener(string eventName, UnityAction<CustomEvent> listener) { 
+  public static void RemoveTypeListener(string eventName, UnityAction<CustomEventData> listener) { 
     if(_eventManager == null) return;
     CustomEvent evt = null;
     if(instance._typedEvents.TryGetValue(eventName,out evt)) {
@@ -76,7 +76,7 @@ public class EventManager : MonoBehaviour {
     }
   }
 
-  public static void TriggerTypeEvent(string eventName, CustomEvent data) {
+  public static void TriggerTypeEvent(string eventName, CustomEventData data) {
     CustomEvent evt = null;
     if(instance._typedEvents.TryGetValue(eventName, out evt)) {
       evt.Invoke(data);
