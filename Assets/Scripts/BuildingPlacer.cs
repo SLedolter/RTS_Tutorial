@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BuildingPlacer : MonoBehaviour {
-  private Building _placedBuilding = null;
+  private Building _placedBuilding;
   private Ray _ray;
   private RaycastHit _raycastHit;
   private Vector3 _lastPlacementPosition;

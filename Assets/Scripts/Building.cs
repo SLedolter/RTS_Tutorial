@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public enum BuildingPlacement {
   VALID,
@@ -8,24 +9,15 @@ public enum BuildingPlacement {
   FIXED
 };
 
-public class Building {
-  private BuildingData _data;
-  private Transform _transform;
-  private int _currentHealth;
+public class Building : Unit {
   private BuildingPlacement _placement;
   private List<Material> _materials;
   private BuildingManager _buildingManager;
 
-  public Building(BuildingData data) {
-    _data = data;
-    _currentHealth = data.healthpoints;
-
-    GameObject g = GameObject.Instantiate(data.prefab) as GameObject;
-    _transform = g.transform;
-    _buildingManager = g.GetComponent<BuildingManager>();
+  public Building(BuildingData data) : base(data) {
+    _buildingManager = _transform.GetComponent<BuildingManager>();
     _materials = new List<Material>();
-    Material[] materials = _transform.Find("Mesh").GetComponent<Renderer>().materials;
-    foreach (Material material in materials) {    
+    foreach (Material material in _transform.Find("Mesh").GetComponent<Renderer>().materials) {
       _materials.Add(new Material(material));
     }
     _placement = BuildingPlacement.VALID;
@@ -44,10 +36,10 @@ public class Building {
     } else if (placement == BuildingPlacement.INVALID) {
       Material refMaterial = Resources.Load("Materials/Invalid") as Material;
       materials = new List<Material>();
-      for(int i = 0; i < _materials.Count; i++) {
+      for (int i = 0; i < _materials.Count; i++) {
         materials.Add(refMaterial);
       }
-    } else if(placement == BuildingPlacement.FIXED) {
+    } else if (placement == BuildingPlacement.FIXED) {
       materials = _materials;
     } else {
       return;
@@ -55,14 +47,21 @@ public class Building {
     _transform.Find("Mesh").GetComponent<Renderer>().materials = materials.ToArray();
   }
 
-  public void SetPosition(Vector3 position) {
-    _transform.position = position;
+  public override void Place() {
+    base.Place();
+    // set placement state
+    _placement = BuildingPlacement.FIXED;
+    // change building materials
+    SetMaterials();
   }
 
-  public string Code { get => _data.code; }
-  public Transform Transform { get { return _transform; } }
-  public int HP { get => _currentHealth; set => _currentHealth = value; }
-  public int MaxHP { get => _data.healthpoints; }
+  public void CheckValidPlacement() {
+    if (_placement == BuildingPlacement.FIXED) { return; }
+    _placement = _buildingManager.CheckPlacement()
+    ? BuildingPlacement.VALID
+      : BuildingPlacement.INVALID;
+  }
+
   public int DataIndex {
     get {
       for (int i = 0; i < Globals.BUILDING_DATA.Length; i++) {
@@ -70,33 +69,6 @@ public class Building {
       }
       return -1;
     }
-  }
-
-  public void Place() {
-    // set placerment state
-    _placement = BuildingPlacement.FIXED;
-    // change building materials
-    SetMaterials();
-    // remove "is trigger" flag from box collider to allow
-    // for collisions with units
-    _transform.GetComponent<BoxCollider>().isTrigger = false;
-
-    // update game resources: remove the cost of the building
-    // from each game resource
-    foreach(ResourceValue resource in _data.cost) {
-      Globals.GAME_RESOURCES[resource.code].AddAmount(-resource.amount);
-    }
-  }
-
-  public bool CanBuy() {
-    return _data.CanBuy();
-  }
-
-  public void CheckValidPlacement() {
-    if(_placement== BuildingPlacement.FIXED) { return; }
-    _placement = _buildingManager.CheckPlacement()
-    ? BuildingPlacement.VALID
-      : BuildingPlacement.INVALID;
   }
 
   public bool IsFixed { get => _placement == BuildingPlacement.FIXED; }

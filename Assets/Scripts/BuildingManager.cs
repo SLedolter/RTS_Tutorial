@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(BoxCollider))]
 public class BuildingManager : UnitManager {
-  private BoxCollider _collider;
-
-  private Building _building = null;
-  private int _nCollisions = 0;
-
-  public void Initialize(Building building) {
-    _collider= GetComponent<BoxCollider>();
-    _building = building;
+  private Building _building;
+  protected override Unit Unit {
+    get { return _building; }
+    set { _building = value is Building ? (Building)value : null; }
   }
+  private int _nCollisions = 0;
 
   private void OnTriggerEnter(Collider other) {
     if (other.tag == "Terrain") return;

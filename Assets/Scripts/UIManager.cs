@@ -96,12 +96,12 @@ public class UIManager : MonoBehaviour {
   }
 
   private void _OnCheckBuildingButtons() {
-    foreach (BuildingData data in Globals.BUILDING_DATA) {
+    foreach (UnitData data in Globals.BUILDING_DATA) {
       _buildingButtons[data.code].interactable = data.CanBuy();
     }
   }
 
-  private void SetInfoPanel(BuildingData data) {
+  private void SetInfoPanel(UnitData data) {
     // update texts
     if (data.code != "") { _infoPanelTitleText.text = data.code.FirstCharacterToUpper(); }
     if (data.description != "") { _infoPanelDescriptionText.text = data.description; }

@@ -4,9 +4,9 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class BuildingButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler {
-  private BuildingData _buildingData;
+  private UnitData _buildingData;
 
-  public void Initialize(BuildingData buildingData) {
+  public void Initialize(UnitData buildingData) {
     _buildingData = buildingData;
   }
 

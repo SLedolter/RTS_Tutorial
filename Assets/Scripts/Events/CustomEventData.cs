@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CustomEventData {
-  public BuildingData buildingData;
+  public UnitData buildingData;
 
-  public CustomEventData(BuildingData buildingData) {
+  public CustomEventData(UnitData buildingData) {
     this.buildingData = buildingData;
   }
 }

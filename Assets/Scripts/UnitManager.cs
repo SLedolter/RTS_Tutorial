@@ -2,11 +2,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class UnitManager : MonoBehaviour {
   public GameObject selectionCircle;
 
+  protected BoxCollider _collider;
+  protected virtual Unit Unit { get; set; }
+    
   private Transform _canvas;
   private GameObject _healthbar;
+
+  public void Initialize(Unit unit) {
+    _collider = GetComponent<BoxCollider>();
+    Unit = unit;
+  }
 
   private void Awake() {
     _canvas = GameObject.Find("UI").transform;
