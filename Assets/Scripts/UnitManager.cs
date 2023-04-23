@@ -30,7 +30,11 @@ public class UnitManager : MonoBehaviour {
       _healthbar = GameObject.Instantiate(Resources.Load("Prefabs/UI/Healthbar")) as GameObject;
       _healthbar.transform.SetParent(_canvas);
       Healthbar h = _healthbar.GetComponent<Healthbar>();
-      h.Initialize(transform);
+      Rect boundingBox = Utils.GetBoundingBoxOnScreen(
+        transform.Find("Mesh").GetComponent<Renderer>().bounds,
+        Camera.main
+        );
+      h.Initialize(transform, boundingBox.height);
       h.SetPosition();
     }
   }
