@@ -16,6 +16,8 @@ public class UIManager : MonoBehaviour {
   public GameObject gameResourceCostPrefab;
   public GameObject infoPanel;
   public Color invalidTextColor;
+  public Transform selectedUnitsListParent;
+  public GameObject selectedUnitDisplayPrefab;
 
   private Dictionary<string, TMP_Text> _resourceTexts;
   private Dictionary<string, Button> _buildingButtons;
@@ -63,6 +65,8 @@ public class UIManager : MonoBehaviour {
     EventManager.AddListener("CheckBuildingButtons", _OnCheckBuildingButtons);
     EventManager.AddTypedListener("HoverBuildingButton", _OnHoverBuildingButton);
     EventManager.AddListener("UnhoverBuildingButton", _OnUnhoverBuildingButton);
+    EventManager.AddTypedListener("SelectUnit", _OnSelectUnit);
+    EventManager.AddTypedListener("DeselectUnit", _OnDeselectUnit);
   }
 
   private void OnDisable() {
@@ -70,6 +74,48 @@ public class UIManager : MonoBehaviour {
     EventManager.RemoveListener("CheckBuildingButtons", _OnCheckBuildingButtons);
     EventManager.RemoveTypeListener("HoverBuildingButton", _OnHoverBuildingButton);
     EventManager.RemoveListener("UnhoverBuildingButton", _OnUnhoverBuildingButton);
+    EventManager.RemoveTypeListener("SelectUnit", _OnSelectUnit);
+    EventManager.RemoveTypeListener("DeselectUnit", _OnDeselectUnit);
+  }
+
+  private void _OnSelectUnit(CustomEventData data) {
+    _AddSelectedUnitToUIList(data.unit);
+  }
+
+  private void _OnDeselectUnit(CustomEventData data) {
+    _RemoveSelectedUnitFromUIList(data.unit.Code);
+  }
+
+  private void _AddSelectedUnitToUIList(Unit unit) {
+    // if there is another unit of the same type already selected,
+    // increase the counter
+    Transform alreadyInstantiatedChild = selectedUnitsListParent.Find(unit.Code);
+    if(alreadyInstantiatedChild != null) {
+      TMP_Text t = alreadyInstantiatedChild.Find("Count").GetComponentInChildren<TMP_Text>();
+      int count = int.Parse(t.text);
+      t.text = (count + 1).ToString();
+    }
+    // else create a brand new counter initialized with a count of 1
+    else {
+      GameObject g = GameObject.Instantiate(selectedUnitDisplayPrefab, selectedUnitsListParent);
+      g.name = unit.Code;
+      Transform t = g.transform;
+      t.Find("Count").GetComponent<TMP_Text>().text = "1";
+      t.Find("Name").GetComponent<TMP_Text>().text = unit.Data.unitName;
+    }
+  }
+
+  public void _RemoveSelectedUnitFromUIList(string code) {
+    Transform listItem = selectedUnitsListParent.Find(code);
+    if(listItem == null) { return; }
+    TMP_Text t = listItem.Find("Count").GetComponent<TMP_Text>();
+    int count = int.Parse(t.text);
+    count -= 1;
+    if(count == 0) {
+      DestroyImmediate(listItem.gameObject);
+    } else {
+      t.text = count.ToString();
+    }
   }
 
   private void SetResourceText(string resource, int value) {
@@ -77,7 +123,7 @@ public class UIManager : MonoBehaviour {
   }
 
   private void _OnHoverBuildingButton(CustomEventData data) {
-    SetInfoPanel(data.buildingData);
+    SetInfoPanel(data.unitData);
     ShowInfoPanel(true);
   }
 
